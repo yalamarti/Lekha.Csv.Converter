@@ -3,7 +3,7 @@
     /// <summary>
     /// Data types supported for CSV fields
     /// </summary>
-    public struct FieldType
+    public struct DataType
     {
         /// <summary>
         /// Equivalent to .NET string type
