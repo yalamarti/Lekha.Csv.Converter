@@ -1,0 +1,4 @@
+CustomerName|Age|Salary|HiredDate
+"Jon Doe"|"35"|"34658.22"|"2018/01/23 00:01:02"
+#This is a commented line.  The whole line is ignored
+"Jane Dane"|"29"|"45002.33"|"2019/12/22 13:01:02"

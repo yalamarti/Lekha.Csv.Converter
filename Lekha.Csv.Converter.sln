@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lekha.Csv.Converter", "Lekh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lekha.Csv.Converter.Tests", "Lekha.Csv.Converter.Tests\Lekha.Csv.Converter.Tests.csproj", "{95B95485-DF59-4586-A492-F7F259091931}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lekha.Csv.Converter.Sample", "Lekha.Csv.Converter.Sample\Lekha.Csv.Converter.Sample.csproj", "{CC4B6FFE-683E-48D9-978B-6795172453FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{95B95485-DF59-4586-A492-F7F259091931}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95B95485-DF59-4586-A492-F7F259091931}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95B95485-DF59-4586-A492-F7F259091931}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC4B6FFE-683E-48D9-978B-6795172453FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC4B6FFE-683E-48D9-978B-6795172453FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC4B6FFE-683E-48D9-978B-6795172453FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC4B6FFE-683E-48D9-978B-6795172453FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

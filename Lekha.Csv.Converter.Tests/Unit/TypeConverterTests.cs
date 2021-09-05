@@ -14,12 +14,12 @@ namespace Lekha.Csv.Converter.Tests
     public class TypeConverterTests
     {
         [Theory]
-        [InlineData("1", "aaa", FieldType.String, false, 10, "aaa", false)]
-        [InlineData("2", "", FieldType.String, false, 10, "", false)]
-        [InlineData("3", "333", FieldType.String, false, 10, "333", false)]
-        [InlineData("4", null, FieldType.String, false, 10, null, false)]
-        [InlineData("5", "   ", FieldType.String, true, 10, "   ", false)]
-        [InlineData("6", "abcdefj", FieldType.String, true, 3, null, true)]
+        [InlineData("1", "aaa", DataType.String, false, 10, "aaa", false)]
+        [InlineData("2", "", DataType.String, false, 10, "", false)]
+        [InlineData("3", "333", DataType.String, false, 10, "333", false)]
+        [InlineData("4", null, DataType.String, false, 10, null, false)]
+        [InlineData("5", "   ", DataType.String, true, 10, "   ", false)]
+        [InlineData("6", "abcdefj", DataType.String, true, 3, null, true)]
         public void ConvertFromStringToStringTests(string testDescription, string valueToTest, string dataType, bool allowEmptyField, int maxLength, string expected, bool throwsException)
         {
             //
@@ -59,12 +59,12 @@ namespace Lekha.Csv.Converter.Tests
         }
 
         [Theory]
-        [InlineData("1", "aaa", FieldType.String, false, 10, "aaa", false)]
-        [InlineData("2", "", FieldType.String, false, 10, "", false)]
-        [InlineData("3", "333", FieldType.String, false, 10, "333", false)]
-        [InlineData("4", null, FieldType.String, false, 10, null, false)]
-        [InlineData("5", "   ", FieldType.String, true, 10, "   ", false)]
-        [InlineData("6", "abcdefj", FieldType.String, true, 3, null, true)]
+        [InlineData("1", "aaa", DataType.String, false, 10, "aaa", false)]
+        [InlineData("2", "", DataType.String, false, 10, "", false)]
+        [InlineData("3", "333", DataType.String, false, 10, "333", false)]
+        [InlineData("4", null, DataType.String, false, 10, null, false)]
+        [InlineData("5", "   ", DataType.String, true, 10, "   ", false)]
+        [InlineData("6", "abcdefj", DataType.String, true, 3, null, true)]
         public void ConvertToStringFromStringTests(string testDescription, string valueToTest, string dataType, bool allowEmptyField, int maxLength, string expected, bool throwsException)
         {
             //
@@ -104,18 +104,18 @@ namespace Lekha.Csv.Converter.Tests
         }
 
         [Theory]
-        [InlineData("1", "0", FieldType.SignedNumber, false, 0, false)]
-        [InlineData("2", "-111", FieldType.SignedNumber, false, -111, false)]
-        [InlineData("3", "88788", FieldType.SignedNumber, false, 88788, false)]
-        [InlineData("4", "2147483647", FieldType.SignedNumber, false, 2147483647, false)]
-        [InlineData("5", "-2147483647", FieldType.SignedNumber, false, -2147483647, false)]
-        [InlineData("6", "9223372036854775807", FieldType.SignedNumber, false, long.MaxValue, false)]
-        [InlineData("7", "-9223372036854775808", FieldType.SignedNumber, false, long.MinValue, false)]
-        [InlineData("8", "   ", FieldType.SignedNumber, true, null, false)]
-        [InlineData("9", "   ", FieldType.SignedNumber, false, null, true)]
-        [InlineData("10", "afsdf", FieldType.SignedNumber, true, null, true)]
-        [InlineData("11", "9223372036854775808", FieldType.SignedNumber, false, null, true)]
-        [InlineData("12", "-9223372036854775809", FieldType.SignedNumber, false, null, true)]
+        [InlineData("1", "0", DataType.SignedNumber, false, 0, false)]
+        [InlineData("2", "-111", DataType.SignedNumber, false, -111, false)]
+        [InlineData("3", "88788", DataType.SignedNumber, false, 88788, false)]
+        [InlineData("4", "2147483647", DataType.SignedNumber, false, 2147483647, false)]
+        [InlineData("5", "-2147483647", DataType.SignedNumber, false, -2147483647, false)]
+        [InlineData("6", "9223372036854775807", DataType.SignedNumber, false, long.MaxValue, false)]
+        [InlineData("7", "-9223372036854775808", DataType.SignedNumber, false, long.MinValue, false)]
+        [InlineData("8", "   ", DataType.SignedNumber, true, null, false)]
+        [InlineData("9", "   ", DataType.SignedNumber, false, null, true)]
+        [InlineData("10", "afsdf", DataType.SignedNumber, true, null, true)]
+        [InlineData("11", "9223372036854775808", DataType.SignedNumber, false, null, true)]
+        [InlineData("12", "-9223372036854775809", DataType.SignedNumber, false, null, true)]
         public void ConvertFromStringToSignedNumberTests(string testDescription, string valueToTest, string dataType, bool allowEmptyField, object expected, bool throwsException)
         {
             //
@@ -155,14 +155,14 @@ namespace Lekha.Csv.Converter.Tests
 
 
         [Theory]
-        [InlineData("1", 0, FieldType.SignedNumber, false, "0", false)]
-        [InlineData("2", -111, FieldType.SignedNumber, false, "-111", false)]
-        [InlineData("3", 88788, FieldType.SignedNumber, false, "88788", false)]
-        [InlineData("4", 2147483647, FieldType.SignedNumber, false, "2147483647", false)]
-        [InlineData("5", -2147483647, FieldType.SignedNumber, false, "-2147483647", false)]
-        [InlineData("6", long.MaxValue, FieldType.SignedNumber, false, "9223372036854775807", false)]
-        [InlineData("7", long.MinValue, FieldType.SignedNumber, false, "-9223372036854775808", false)]
-        [InlineData("8", null, FieldType.SignedNumber, true, null, false)]
+        [InlineData("1", 0, DataType.SignedNumber, false, "0", false)]
+        [InlineData("2", -111, DataType.SignedNumber, false, "-111", false)]
+        [InlineData("3", 88788, DataType.SignedNumber, false, "88788", false)]
+        [InlineData("4", 2147483647, DataType.SignedNumber, false, "2147483647", false)]
+        [InlineData("5", -2147483647, DataType.SignedNumber, false, "-2147483647", false)]
+        [InlineData("6", long.MaxValue, DataType.SignedNumber, false, "9223372036854775807", false)]
+        [InlineData("7", long.MinValue, DataType.SignedNumber, false, "-9223372036854775808", false)]
+        [InlineData("8", null, DataType.SignedNumber, true, null, false)]
         public void ConvertToStringFromSignedNumberTests(string testDescription, object valueToTest, string dataType, bool allowEmptyField, string expected, bool throwsException)
         {
             //
@@ -202,20 +202,20 @@ namespace Lekha.Csv.Converter.Tests
 
 
         [Theory]
-        [InlineData("1", "0", FieldType.UnsignedNumber, false, 0U, false)]
-        [InlineData("2", "-111", FieldType.UnsignedNumber, false, null, true)]
-        [InlineData("3", "88788", FieldType.UnsignedNumber, false, 88788U, false)]
-        [InlineData("4", "2147483647", FieldType.UnsignedNumber, false, 2147483647U, false)]
-        [InlineData("5", "-2147483647", FieldType.UnsignedNumber, false, null, true)]
-        [InlineData("6", "9223372036854775807", FieldType.UnsignedNumber, false, 9223372036854775807U, false)]
-        [InlineData("7", "-9223372036854775808", FieldType.UnsignedNumber, false, null, true)]
-        [InlineData("8", "   ", FieldType.UnsignedNumber, true, null, false)]
-        [InlineData("9", "   ", FieldType.UnsignedNumber, false, null, true)]
-        [InlineData("10", "afsdf", FieldType.UnsignedNumber, true, null, true)]
-        [InlineData("11", "9223372036854775808", FieldType.UnsignedNumber, false, 9223372036854775808U, false)]
-        [InlineData("12", "-9223372036854775809", FieldType.UnsignedNumber, false, null, true)]
-        [InlineData("13", "18446744073709551615", FieldType.UnsignedNumber, false, ulong.MaxValue, false)]  // max ulong
-        [InlineData("14", "18446744073709551616", FieldType.UnsignedNumber, false, ulong.MaxValue, true)]   // max ulong plus 1
+        [InlineData("1", "0", DataType.UnsignedNumber, false, 0U, false)]
+        [InlineData("2", "-111", DataType.UnsignedNumber, false, null, true)]
+        [InlineData("3", "88788", DataType.UnsignedNumber, false, 88788U, false)]
+        [InlineData("4", "2147483647", DataType.UnsignedNumber, false, 2147483647U, false)]
+        [InlineData("5", "-2147483647", DataType.UnsignedNumber, false, null, true)]
+        [InlineData("6", "9223372036854775807", DataType.UnsignedNumber, false, 9223372036854775807U, false)]
+        [InlineData("7", "-9223372036854775808", DataType.UnsignedNumber, false, null, true)]
+        [InlineData("8", "   ", DataType.UnsignedNumber, true, null, false)]
+        [InlineData("9", "   ", DataType.UnsignedNumber, false, null, true)]
+        [InlineData("10", "afsdf", DataType.UnsignedNumber, true, null, true)]
+        [InlineData("11", "9223372036854775808", DataType.UnsignedNumber, false, 9223372036854775808U, false)]
+        [InlineData("12", "-9223372036854775809", DataType.UnsignedNumber, false, null, true)]
+        [InlineData("13", "18446744073709551615", DataType.UnsignedNumber, false, ulong.MaxValue, false)]  // max ulong
+        [InlineData("14", "18446744073709551616", DataType.UnsignedNumber, false, ulong.MaxValue, true)]   // max ulong plus 1
         public void ConvertFromStringToUnsignedNumberTests(string testDescription, string valueToTest, string dataType, bool allowEmptyField, object expected, bool throwsException)
         {
             //
@@ -255,11 +255,11 @@ namespace Lekha.Csv.Converter.Tests
 
 
         [Theory]
-        [InlineData("1", 0U, FieldType.UnsignedNumber, false, "0", false)]
-        [InlineData("3", 88788U, FieldType.UnsignedNumber, false, "88788", false)]
-        [InlineData("4", 2147483647U, FieldType.UnsignedNumber, false, "2147483647", false)]
-        [InlineData("6", ulong.MaxValue, FieldType.UnsignedNumber, false, "18446744073709551615", false)]
-        [InlineData("8", null, FieldType.UnsignedNumber, true, null, false)]
+        [InlineData("1", 0U, DataType.UnsignedNumber, false, "0", false)]
+        [InlineData("3", 88788U, DataType.UnsignedNumber, false, "88788", false)]
+        [InlineData("4", 2147483647U, DataType.UnsignedNumber, false, "2147483647", false)]
+        [InlineData("6", ulong.MaxValue, DataType.UnsignedNumber, false, "18446744073709551615", false)]
+        [InlineData("8", null, DataType.UnsignedNumber, true, null, false)]
         public void ConvertToStringFromUnsignedNumberTests(string testDescription, object valueToTest, string dataType, bool allowEmptyField, string expected, bool throwsException)
         {
             //
@@ -299,32 +299,32 @@ namespace Lekha.Csv.Converter.Tests
 
 
         [Theory]
-        [InlineData("1", "1", "0", FieldType.Decimal, false, false)]
-        [InlineData("2", "2", "-111", FieldType.Decimal, false, false)]
-        [InlineData("3", "3", "88788", FieldType.Decimal, false, false)]
-        [InlineData("4", "4", "2147483647", FieldType.Decimal, false, false)]
-        [InlineData("5", "5", "-2147483647", FieldType.Decimal, false, false)]
-        [InlineData("6", "6", "9223372036854775807", FieldType.Decimal, false, false)]
-        [InlineData("7", "7", "-9223372036854775808", FieldType.Decimal, false, false)]
-        [InlineData("8", "8", "9223372036854775807.89", FieldType.Decimal, false, false)]
-        [InlineData("9", "9", "-9223372036854775808.89", FieldType.Decimal, false, false)]
-        [InlineData("10", "10", "   ", FieldType.Decimal, true, false)]
-        [InlineData("11", "11", "   ", FieldType.Decimal, false, true)]
-        [InlineData("12", "12", "afsdf", FieldType.Decimal, true, true)]
-        [InlineData("13", "13", "9223372036854775808", FieldType.Decimal, false, false)]
-        [InlineData("14", "14", "-9223372036854775809", FieldType.Decimal, false, false)]
-        [InlineData("15", "15", "79228162514264337593543950335", FieldType.Decimal, false, false)]
-        [InlineData("16", "16", "-79228162514264337593543950335", FieldType.Decimal, false, false)]
-        [InlineData("17", "17", "79228162514264337593543950336", FieldType.Decimal, false, true)]
-        [InlineData("18", "18", "-79228162514264337593543950336", FieldType.Decimal, false, true)]
-        [InlineData("19", "19", "792281625.123456789012345678901234567890123456789", FieldType.Decimal, false, false)]
-        [InlineData("20", "20", "-792281625.123456789012345678901234567890123456789", FieldType.Decimal, false, false)]
-        [InlineData("21", "21", "792281625.199", FieldType.Decimal, false, false)]
-        [InlineData("22", "22", "-792281625.199", FieldType.Decimal, false, false)]
-        [InlineData("23", "23", "-0.9999999999999999999999999999", FieldType.Decimal, false, false)]
-        [InlineData("24", "24", "0.9999999999999999999999999999", FieldType.Decimal, false, false)]
-        [InlineData("25", "25", "-0.99999999999999999999999999999", FieldType.Decimal, false,  false)]
-        [InlineData("26", "26", "0.99999999999999999999999999999", FieldType.Decimal, false, false)]
+        [InlineData("1", "1", "0", DataType.Decimal, false, false)]
+        [InlineData("2", "2", "-111", DataType.Decimal, false, false)]
+        [InlineData("3", "3", "88788", DataType.Decimal, false, false)]
+        [InlineData("4", "4", "2147483647", DataType.Decimal, false, false)]
+        [InlineData("5", "5", "-2147483647", DataType.Decimal, false, false)]
+        [InlineData("6", "6", "9223372036854775807", DataType.Decimal, false, false)]
+        [InlineData("7", "7", "-9223372036854775808", DataType.Decimal, false, false)]
+        [InlineData("8", "8", "9223372036854775807.89", DataType.Decimal, false, false)]
+        [InlineData("9", "9", "-9223372036854775808.89", DataType.Decimal, false, false)]
+        [InlineData("10", "10", "   ", DataType.Decimal, true, false)]
+        [InlineData("11", "11", "   ", DataType.Decimal, false, true)]
+        [InlineData("12", "12", "afsdf", DataType.Decimal, true, true)]
+        [InlineData("13", "13", "9223372036854775808", DataType.Decimal, false, false)]
+        [InlineData("14", "14", "-9223372036854775809", DataType.Decimal, false, false)]
+        [InlineData("15", "15", "79228162514264337593543950335", DataType.Decimal, false, false)]
+        [InlineData("16", "16", "-79228162514264337593543950335", DataType.Decimal, false, false)]
+        [InlineData("17", "17", "79228162514264337593543950336", DataType.Decimal, false, true)]
+        [InlineData("18", "18", "-79228162514264337593543950336", DataType.Decimal, false, true)]
+        [InlineData("19", "19", "792281625.123456789012345678901234567890123456789", DataType.Decimal, false, false)]
+        [InlineData("20", "20", "-792281625.123456789012345678901234567890123456789", DataType.Decimal, false, false)]
+        [InlineData("21", "21", "792281625.199", DataType.Decimal, false, false)]
+        [InlineData("22", "22", "-792281625.199", DataType.Decimal, false, false)]
+        [InlineData("23", "23", "-0.9999999999999999999999999999", DataType.Decimal, false, false)]
+        [InlineData("24", "24", "0.9999999999999999999999999999", DataType.Decimal, false, false)]
+        [InlineData("25", "25", "-0.99999999999999999999999999999", DataType.Decimal, false,  false)]
+        [InlineData("26", "26", "0.99999999999999999999999999999", DataType.Decimal, false, false)]
         public void ConvertFromStringToDecimalTests(string testDescription, string expectedResultKey, string valueToTest, string dataType, bool allowEmptyField, bool throwsException)
         {
             // Cannot pass (compilation error) decimal as a parameter as inlinedata - so using this dictionary as a lookup with expectedResultKey
@@ -397,27 +397,27 @@ namespace Lekha.Csv.Converter.Tests
 
 
         [Theory]
-        [InlineData("1", "1", FieldType.Decimal, false, "0", false)]
-        [InlineData("2", "2", FieldType.Decimal, false, "88788", false)]
-        [InlineData("3", "3", FieldType.Decimal, false, "2147483647", false)]
-        [InlineData("4", "4", FieldType.Decimal, false, "9223372036854775807", false)]
-        [InlineData("5", "5", FieldType.Decimal, false, "-9223372036854775807", false)]
-        [InlineData("6", "6", FieldType.Decimal, true, null, false)]
-        [InlineData("7", "7", FieldType.Decimal, false, "-9223372036854775807.747446", false)]
-        [InlineData("8", "8", FieldType.Decimal, false, "79228162514264337593543950335", false)]
-        [InlineData("9", "9", FieldType.Decimal, false, "-79228162514264337593543950335", false)]
-        [InlineData("10", "10", FieldType.Decimal, false, "79228162514264337593543950336", true)]
-        [InlineData("11", "11", FieldType.Decimal, false, "-79228162514264337593543950336", true)]
-        [InlineData("12", "12", FieldType.Decimal, false, "79228162514264337593543950335", false)]
-        [InlineData("13", "13", FieldType.Decimal, false, "-79228162514264337593543950335", false)]
-        [InlineData("14", "14", FieldType.Decimal, false, "792281625.199", false)]
-        [InlineData("15", "15", FieldType.Decimal, false, "-792281625.199", false)]
-        [InlineData("16", "16", FieldType.Decimal, false, "-0.79228162514264337593543999", false)]
-        [InlineData("17", "17", FieldType.Decimal, false, "0.79228162514264337593543999", false)]
-        [InlineData("18", "18", FieldType.Decimal, false, "-0.9999999999999999999999999999", false)]
-        [InlineData("19", "19", FieldType.Decimal, false, "0.9999999999999999999999999999", false)]
-        [InlineData("20", "20", FieldType.Decimal, false, "-1.0000000000000000000000000000", false)]
-        [InlineData("21", "21", FieldType.Decimal, false, "1.0000000000000000000000000000", false)]
+        [InlineData("1", "1", DataType.Decimal, false, "0", false)]
+        [InlineData("2", "2", DataType.Decimal, false, "88788", false)]
+        [InlineData("3", "3", DataType.Decimal, false, "2147483647", false)]
+        [InlineData("4", "4", DataType.Decimal, false, "9223372036854775807", false)]
+        [InlineData("5", "5", DataType.Decimal, false, "-9223372036854775807", false)]
+        [InlineData("6", "6", DataType.Decimal, true, null, false)]
+        [InlineData("7", "7", DataType.Decimal, false, "-9223372036854775807.747446", false)]
+        [InlineData("8", "8", DataType.Decimal, false, "79228162514264337593543950335", false)]
+        [InlineData("9", "9", DataType.Decimal, false, "-79228162514264337593543950335", false)]
+        [InlineData("10", "10", DataType.Decimal, false, "79228162514264337593543950336", true)]
+        [InlineData("11", "11", DataType.Decimal, false, "-79228162514264337593543950336", true)]
+        [InlineData("12", "12", DataType.Decimal, false, "79228162514264337593543950335", false)]
+        [InlineData("13", "13", DataType.Decimal, false, "-79228162514264337593543950335", false)]
+        [InlineData("14", "14", DataType.Decimal, false, "792281625.199", false)]
+        [InlineData("15", "15", DataType.Decimal, false, "-792281625.199", false)]
+        [InlineData("16", "16", DataType.Decimal, false, "-0.79228162514264337593543999", false)]
+        [InlineData("17", "17", DataType.Decimal, false, "0.79228162514264337593543999", false)]
+        [InlineData("18", "18", DataType.Decimal, false, "-0.9999999999999999999999999999", false)]
+        [InlineData("19", "19", DataType.Decimal, false, "0.9999999999999999999999999999", false)]
+        [InlineData("20", "20", DataType.Decimal, false, "-1.0000000000000000000000000000", false)]
+        [InlineData("21", "21", DataType.Decimal, false, "1.0000000000000000000000000000", false)]
         public void ConvertToStringFromDecimalTests(string testDescription, string inputKey, string dataType, bool allowEmptyField, string expected, bool throwsException)
         {
             // Cannot pass (compilation error) decimal as a parameter as inlinedata - so using this dictionary as a lookup with inputKey
@@ -482,17 +482,17 @@ namespace Lekha.Csv.Converter.Tests
 
 
         [Theory]
-        [InlineData("1", "1", "0", DefaultFormat.Date, FieldType.Date, false, true)]
-        [InlineData("2", "2", "aaaaa", DefaultFormat.Date, FieldType.Date, false, true)]
-        [InlineData("3", "3", "2021/10/21", DefaultFormat.Date, FieldType.Date, false, false)]
-        [InlineData("4", "4", "2021/10/21", "aaa", FieldType.Date, false, true)]
-        [InlineData("5", "5", " ", DefaultFormat.Date, FieldType.Date, true, false)]
-        [InlineData("6", "6", null, DefaultFormat.Date, FieldType.Date, true, false)]
-        [InlineData("7", "7", "2021/21/10", "yyyy/dd/MM", FieldType.Date, false, false)]
-        [InlineData("8", "8", "21/10/2021", "dd/MM/yyyy", FieldType.Date, false, false)]
-        [InlineData("9", "9", "9999/21/10", "yyyy/dd/MM", FieldType.Date, false, false)]
-        [InlineData("10", "10", "2021/21", "yyyy/dd", FieldType.Date, false, false)]
-        [InlineData("11", "11", "2021/21/10", "dd/MM/yyyy", FieldType.Date, false, false)]
+        [InlineData("1", "1", "0", DefaultFormat.Date, DataType.Date, false, true)]
+        [InlineData("2", "2", "aaaaa", DefaultFormat.Date, DataType.Date, false, true)]
+        [InlineData("3", "3", "2021/10/21", DefaultFormat.Date, DataType.Date, false, false)]
+        [InlineData("4", "4", "2021/10/21", "aaa", DataType.Date, false, true)]
+        [InlineData("5", "5", " ", DefaultFormat.Date, DataType.Date, true, false)]
+        [InlineData("6", "6", null, DefaultFormat.Date, DataType.Date, true, false)]
+        [InlineData("7", "7", "2021/21/10", "yyyy/dd/MM", DataType.Date, false, false)]
+        [InlineData("8", "8", "21/10/2021", "dd/MM/yyyy", DataType.Date, false, false)]
+        [InlineData("9", "9", "9999/21/10", "yyyy/dd/MM", DataType.Date, false, false)]
+        [InlineData("10", "10", "2021/21", "yyyy/dd", DataType.Date, false, false)]
+        [InlineData("11", "11", "2021/21/10", "dd/MM/yyyy", DataType.Date, false, false)]
         public void ConvertFromStringToDateTests(string testDescription, string expectedResultKey, string valueToTest, string dateFormat, string dataType, bool allowEmptyField, bool throwsException)
         {
             // Cannot pass (compilation error) decimal as a parameter as inlinedata - so using this dictionary as a lookup with expectedResultKey
@@ -548,16 +548,16 @@ namespace Lekha.Csv.Converter.Tests
 
 
         [Theory]
-        [InlineData("1", "1", DefaultFormat.Date, FieldType.Date, false, null, true)]
-        [InlineData("3", "3", DefaultFormat.Date, FieldType.Date, false, "2021/10/21", false)]
-        [InlineData("7", "7", "yyyy/dd/MM", FieldType.Date, false, "2021/21/10", false)]
-        [InlineData("8", "8", "dd/MM/yyyy", FieldType.Date, false, "21/10/2021", false)]
-        [InlineData("9", "9", "yyyy/dd/MM", FieldType.Date, false, "9999/21/10", false)]
-        [InlineData("10", "10", "yyyy/dd", FieldType.Date, false, "2021/21", false)]
-        [InlineData("11", "11", "yyyy/dd", FieldType.Date, false, "9999/31", false)]
-        [InlineData("12", "12", "yyyy/dd/MM", FieldType.Date, false, "9999/31/12", false)]
-        [InlineData("13", "13", "yyyy/dd", FieldType.Date, false, "0001/01", false)]
-        [InlineData("14", "14", "yyyy/dd/MM", FieldType.Date, false, "0001/01/01", false)]
+        [InlineData("1", "1", DefaultFormat.Date, DataType.Date, false, null, true)]
+        [InlineData("3", "3", DefaultFormat.Date, DataType.Date, false, "2021/10/21", false)]
+        [InlineData("7", "7", "yyyy/dd/MM", DataType.Date, false, "2021/21/10", false)]
+        [InlineData("8", "8", "dd/MM/yyyy", DataType.Date, false, "21/10/2021", false)]
+        [InlineData("9", "9", "yyyy/dd/MM", DataType.Date, false, "9999/21/10", false)]
+        [InlineData("10", "10", "yyyy/dd", DataType.Date, false, "2021/21", false)]
+        [InlineData("11", "11", "yyyy/dd", DataType.Date, false, "9999/31", false)]
+        [InlineData("12", "12", "yyyy/dd/MM", DataType.Date, false, "9999/31/12", false)]
+        [InlineData("13", "13", "yyyy/dd", DataType.Date, false, "0001/01", false)]
+        [InlineData("14", "14", "yyyy/dd/MM", DataType.Date, false, "0001/01/01", false)]
         public void ConvertToStringFromDateTests(string testDescription, string valueToTestKey, string dateFormat, string dataType, bool allowEmptyField, string expectedResult, bool throwsException)
         {
             // Cannot pass (compilation error) decimal as a parameter as inlinedata - so using this dictionary as a lookup with expectedResultKey
@@ -612,19 +612,19 @@ namespace Lekha.Csv.Converter.Tests
 
 
         [Theory]
-        [InlineData("1", "1", "0", DefaultFormat.Time, FieldType.Time, false, true)]
-        [InlineData("2", "2", "aaaaa", DefaultFormat.Time, FieldType.Time, false, true)]
-        [InlineData("3", "3", "13:19", DefaultFormat.Time, FieldType.Time, false, false)]
-        [InlineData("4", "4", "13:19", "aaa", FieldType.Time, false, true)]
-        [InlineData("5", "5", " ", DefaultFormat.Time, FieldType.Time, true, false)]
-        [InlineData("6", "6", null, DefaultFormat.Time, FieldType.Time, true, false)]
-        [InlineData("7", "7", "19:13", "mm:HH", FieldType.Time, false, true)]
-        [InlineData("8", "8", "24:00", "HH:mm", FieldType.Time, false, true)]
-        [InlineData("9", "9", "19:13", "hh\\:mm", FieldType.Time, false, false)]
-        [InlineData("10", "10", "19:13", "mm\\:hh", FieldType.Time, false, false)]
-        [InlineData("11", "11", "24:00", "HH\\:mm", FieldType.Time, false, true)]
-        [InlineData("12", "12", "24:10", "HH\\:mm", FieldType.Time, false, true)]
-        [InlineData("13", "13", "-4:10", "HH\\:mm", FieldType.Time, false, true)]
+        [InlineData("1", "1", "0", DefaultFormat.Time, DataType.Time, false, true)]
+        [InlineData("2", "2", "aaaaa", DefaultFormat.Time, DataType.Time, false, true)]
+        [InlineData("3", "3", "13:19", DefaultFormat.Time, DataType.Time, false, false)]
+        [InlineData("4", "4", "13:19", "aaa", DataType.Time, false, true)]
+        [InlineData("5", "5", " ", DefaultFormat.Time, DataType.Time, true, false)]
+        [InlineData("6", "6", null, DefaultFormat.Time, DataType.Time, true, false)]
+        [InlineData("7", "7", "19:13", "mm:HH", DataType.Time, false, true)]
+        [InlineData("8", "8", "24:00", "HH:mm", DataType.Time, false, true)]
+        [InlineData("9", "9", "19:13", "hh\\:mm", DataType.Time, false, false)]
+        [InlineData("10", "10", "19:13", "mm\\:hh", DataType.Time, false, false)]
+        [InlineData("11", "11", "24:00", "HH\\:mm", DataType.Time, false, true)]
+        [InlineData("12", "12", "24:10", "HH\\:mm", DataType.Time, false, true)]
+        [InlineData("13", "13", "-4:10", "HH\\:mm", DataType.Time, false, true)]
         public void ConvertFromStringToTimeTests(string testDescription, string expectedResultKey, string valueToTest, string dateFormat, string dataType, bool allowEmptyField, bool throwsException)
         {
             // Cannot pass (compilation error) decimal as a parameter as inlinedata - so using this dictionary as a lookup with expectedResultKey
@@ -682,13 +682,13 @@ namespace Lekha.Csv.Converter.Tests
 
 
         [Theory]
-        [InlineData("1", "1", DefaultFormat.Time, FieldType.Time, false, null, true)]
-        [InlineData("3", "3", DefaultFormat.Time, FieldType.Time, false, "13:19", false)]
-        [InlineData("4", "4", "aaa", FieldType.Time, false, "13:19", true)]
-        [InlineData("7", "7", "mm:HH", FieldType.Time, false, "19:13", true)]
-        [InlineData("8", "8", "HH:mm", FieldType.Time, false, "24:00", true)]
-        [InlineData("9", "9", "hh\\:mm", FieldType.Time, false, "19:13", false)]
-        [InlineData("10", "10", "mm\\:hh", FieldType.Time, false, "19:13", false)]
+        [InlineData("1", "1", DefaultFormat.Time, DataType.Time, false, null, true)]
+        [InlineData("3", "3", DefaultFormat.Time, DataType.Time, false, "13:19", false)]
+        [InlineData("4", "4", "aaa", DataType.Time, false, "13:19", true)]
+        [InlineData("7", "7", "mm:HH", DataType.Time, false, "19:13", true)]
+        [InlineData("8", "8", "HH:mm", DataType.Time, false, "24:00", true)]
+        [InlineData("9", "9", "hh\\:mm", DataType.Time, false, "19:13", false)]
+        [InlineData("10", "10", "mm\\:hh", DataType.Time, false, "19:13", false)]
         public void ConvertToStringFromTimeTests(string testDescription, string valueToTestKey, string dateFormat, string dataType, bool allowEmptyField, string expectedResult, bool throwsException)
         {
             // Cannot pass (compilation error) decimal as a parameter as inlinedata - so using this dictionary as a lookup with expectedResultKey
@@ -740,17 +740,17 @@ namespace Lekha.Csv.Converter.Tests
 
 
         [Theory]
-        [InlineData("1", "1", "0", DefaultFormat.DateTime, FieldType.DateTime, false, true)]
-        [InlineData("2", "2", "aaaaa", DefaultFormat.DateTime, FieldType.DateTime, false, true)]
-        [InlineData("3", "3", "2021/10/21 13:59", DefaultFormat.DateTime, FieldType.DateTime, false, false)]
-        [InlineData("4", "4", "2021/10/21 13:59", "aaa", FieldType.DateTime, false, true)]
-        [InlineData("5", "5", " ", DefaultFormat.DateTime, FieldType.DateTime, true, false)]
-        [InlineData("6", "6", null, DefaultFormat.DateTime, FieldType.DateTime, true, false)]
-        [InlineData("7", "7", "2021/21/10 13:59", "yyyy/dd/MM HH:mm", FieldType.DateTime, false, false)]
-        [InlineData("8", "8", "21/10/2021 13:59", "dd/MM/yyyy HH:mm", FieldType.DateTime, false, false)]
-        [InlineData("9", "9", "9999/21/10 13:59", "yyyy/dd/MM HH:mm", FieldType.DateTime, false, false)]
-        [InlineData("10", "10", "2021/21 13:59", "yyyy/dd HH:mm", FieldType.DateTime, false, false)]
-        [InlineData("11", "11", "2021/21/10 13:59", "dd/MM/yyyy HH:mm", FieldType.DateTime, false, false)]
+        [InlineData("1", "1", "0", DefaultFormat.DateTime, DataType.DateTime, false, true)]
+        [InlineData("2", "2", "aaaaa", DefaultFormat.DateTime, DataType.DateTime, false, true)]
+        [InlineData("3", "3", "2021/10/21 13:59", DefaultFormat.DateTime, DataType.DateTime, false, false)]
+        [InlineData("4", "4", "2021/10/21 13:59", "aaa", DataType.DateTime, false, true)]
+        [InlineData("5", "5", " ", DefaultFormat.DateTime, DataType.DateTime, true, false)]
+        [InlineData("6", "6", null, DefaultFormat.DateTime, DataType.DateTime, true, false)]
+        [InlineData("7", "7", "2021/21/10 13:59", "yyyy/dd/MM HH:mm", DataType.DateTime, false, false)]
+        [InlineData("8", "8", "21/10/2021 13:59", "dd/MM/yyyy HH:mm", DataType.DateTime, false, false)]
+        [InlineData("9", "9", "9999/21/10 13:59", "yyyy/dd/MM HH:mm", DataType.DateTime, false, false)]
+        [InlineData("10", "10", "2021/21 13:59", "yyyy/dd HH:mm", DataType.DateTime, false, false)]
+        [InlineData("11", "11", "2021/21/10 13:59", "dd/MM/yyyy HH:mm", DataType.DateTime, false, false)]
         public void ConvertFromStringToDateTimeTests(string testDescription, string expectedResultKey, string valueToTest, string dateFormat, string dataType, bool allowEmptyField, bool throwsException)
         {
             // Cannot pass (compilation error) decimal as a parameter as inlinedata - so using this dictionary as a lookup with expectedResultKey
@@ -806,16 +806,16 @@ namespace Lekha.Csv.Converter.Tests
 
 
         [Theory]
-        [InlineData("1", "1", DefaultFormat.DateTime, FieldType.DateTime, false, null, true)]
-        [InlineData("3", "3", DefaultFormat.DateTime, FieldType.DateTime, false, "2021/10/21 13:19", false)]
-        [InlineData("7", "7", "yyyy/dd/MM HH:mm", FieldType.DateTime, false, "2021/21/10 13:19", false)]
-        [InlineData("8", "8", "dd/MM/yyyy HH:mm", FieldType.DateTime, false, "21/10/2021 13:19", false)]
-        [InlineData("9", "9", "yyyy/dd/MM HH:mm", FieldType.DateTime, false, "9999/21/10 13:19", false)]
-        [InlineData("10", "10", "yyyy/dd HH:mm", FieldType.DateTime, false, "2021/21 13:19", false)]
-        [InlineData("11", "11", "yyyy/dd HH:mm", FieldType.DateTime, false, "9999/31 23:59", false)]
-        [InlineData("12", "12", "yyyy/dd/MM HH:mm", FieldType.DateTime, false, "9999/31/12 23:59", false)]
-        [InlineData("13", "13", "yyyy/dd HH:mm", FieldType.DateTime, false, "0001/01 00:00", false)]
-        [InlineData("14", "14", "yyyy/dd/MM HH:mm", FieldType.DateTime, false, "0001/01/01 00:00", false)]
+        [InlineData("1", "1", DefaultFormat.DateTime, DataType.DateTime, false, null, true)]
+        [InlineData("3", "3", DefaultFormat.DateTime, DataType.DateTime, false, "2021/10/21 13:19", false)]
+        [InlineData("7", "7", "yyyy/dd/MM HH:mm", DataType.DateTime, false, "2021/21/10 13:19", false)]
+        [InlineData("8", "8", "dd/MM/yyyy HH:mm", DataType.DateTime, false, "21/10/2021 13:19", false)]
+        [InlineData("9", "9", "yyyy/dd/MM HH:mm", DataType.DateTime, false, "9999/21/10 13:19", false)]
+        [InlineData("10", "10", "yyyy/dd HH:mm", DataType.DateTime, false, "2021/21 13:19", false)]
+        [InlineData("11", "11", "yyyy/dd HH:mm", DataType.DateTime, false, "9999/31 23:59", false)]
+        [InlineData("12", "12", "yyyy/dd/MM HH:mm", DataType.DateTime, false, "9999/31/12 23:59", false)]
+        [InlineData("13", "13", "yyyy/dd HH:mm", DataType.DateTime, false, "0001/01 00:00", false)]
+        [InlineData("14", "14", "yyyy/dd/MM HH:mm", DataType.DateTime, false, "0001/01/01 00:00", false)]
         public void ConvertToStringFromDateTimeTests(string testDescription, string valueToTestKey, string dateFormat, string dataType, bool allowEmptyField, string expectedResult, bool throwsException)
         {
             // Cannot pass (compilation error) decimal as a parameter as inlinedata - so using this dictionary as a lookup with expectedResultKey

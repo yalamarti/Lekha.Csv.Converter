@@ -21,6 +21,13 @@
         public char? CommentCharacter { get; set; }
 
         /// <summary>
+        /// Field name prefix.  Applicable when no field names are specified
+        /// Default: Defined by FieldPrefix.Default constant
+        /// <seealso cref="FieldPrefix.Default"/>
+        /// </summary>
+        public string FieldNamePrefix { get; set; } = FieldPrefix.Default;
+
+        /// <summary>
         /// Configuration for records that are part of the CSV data being converted.
         /// Optional.
         /// Default: Refer to RecordConfiguration class, for defaults
