@@ -31,3 +31,4 @@ jobs:
         # Filepath of the project to be packaged, relative to root of repository
         PROJECT_FILE_PATH: Lekha.Csv.Converter/Lekha.Csv.Converter.csproj
         NUGET_KEY: ${{secrets.MY_NUGET_API_KEY}}
+        VERSION_REGEX: ^\s*<Version>(.*)<\/Version>(.*)<\/Version>\s*$
