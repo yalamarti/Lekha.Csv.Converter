@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="DataFiles\TestCase.json">
+    <None Update="DataFiles/TestCase.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

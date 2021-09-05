@@ -87,8 +87,8 @@ namespace Lekha.Csv.Converter.Tests
             //
             // Setup
             //
-            var testCaseDataFile = "DataFiles\\TestCase.json";
-            var data = File.ReadAllText("DataFiles\\TestCase.json");
+            var testCaseDataFile = "DataFiles/TestCase.json";
+            var data = File.ReadAllText(testCaseDataFile);
 
             var testCases = JsonSerializer.Deserialize<List<TestCase>>(data);
 
