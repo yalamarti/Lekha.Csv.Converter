@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -176,7 +177,7 @@ namespace Lekha.Csv.Converter
             {
                 return new ConversionResult
                 {
-                    Message = 
+                    Message =
                         fieldConfigurationSource == FieldConfigurationSource.FromFieldConfiguration ?
                             "CSV data Record Configuration - field with no name specified found!  When one or more fields are specified, Field Name is required for every field!"
                             : "Header - field with no name specified found!  When one or more fields are specified, Field Name is required for every field!"
@@ -194,7 +195,7 @@ namespace Lekha.Csv.Converter
                 return new ConversionResult
                 {
                     Message =
-                        fieldConfigurationSource == FieldConfigurationSource.FromFieldConfiguration 
+                        fieldConfigurationSource == FieldConfigurationSource.FromFieldConfiguration
                         ? $"CSV data Record Configuration - field with same name(s) '{names}' appears more than once"
                         : $"Header - field with same name(s) '{names}' appears more than once",
                     DuplicateFields = duplicateFields.ToArray()
@@ -291,10 +292,9 @@ namespace Lekha.Csv.Converter
             return csvConfiguration;
         }
 
-        public Task<ConversionResult> ConvertAsync(Stream stream, Func<long, Dictionary<string, object>, Task> processedRecordCallback, Func<ParseError, Task<bool>> errorCallback)
+        private ConverterConfiguration GetDefaultConverterConfiguration()
         {
-            // Setup default converter configuration
-            var converterConfiguration = new ConverterConfiguration
+            return new ConverterConfiguration
             {
                 RecordConfiguration = new RecordConfiguration
                 {
@@ -302,12 +302,65 @@ namespace Lekha.Csv.Converter
                     Fields = new List<FieldConfiguration>(),
                 }
             };
-
-            return ConvertAsync(stream, converterConfiguration, processedRecordCallback, errorCallback);
         }
 
-        public async Task<ConversionResult> ConvertAsync(Stream stream, ConverterConfiguration converterConfiguration,
-            Func<long, Dictionary<string, object>, Task> processedRecordCallback, Func<ParseError, Task<bool>> errorCallback)
+
+        public async Task<ConversionResult> ConvertAsync(Stream stream,
+            Func<long, Dictionary<string, object>, Task> processedRecordCallback,
+            Func<ParseError, Task<bool>> errorCallback)
+        {
+            var converterConfiguration = GetDefaultConverterConfiguration();
+            return await ConvertAsync(stream,
+                converterConfiguration,
+                processedRecordCallback,
+                errorCallback);
+        }
+
+        public async Task<ConversionResult> ConvertAsync(Stream stream,
+            ConverterConfiguration converterConfiguration,
+            Func<long, Dictionary<string, object>, Task> processedRecordCallback,
+            Func<ParseError, Task<bool>> errorCallback)
+        {
+            Dictionary<string, object> processedRecord = new Dictionary<string, object>();
+            var retVal = await Task.Run(() => ConvertAsync(stream,
+            converterConfiguration,
+            (long recordIndex, int fieldIndex, string fieldName, object fieldValue) =>
+            {
+                if (fieldIndex == -1)
+                {
+                    var t = processedRecordCallback(recordIndex, processedRecord);
+                    t.Wait();
+                    processedRecord = new Dictionary<string, object>();
+                }
+                else
+                {
+                    processedRecord[fieldName] = fieldValue;
+                }
+                return true;
+            }, (ParseError parseError) =>
+            {
+                var t = errorCallback(parseError);
+                t.Wait();
+                return t.Result;
+            }));
+            return retVal;
+        }
+
+        public ConversionResult ConvertAsync(Stream stream,
+            Func<long, int, string, object, bool> processedFieldCallback,
+            Func<ParseError, bool> errorCallback)
+        {
+            var converterConfiguration = GetDefaultConverterConfiguration();
+            return ConvertAsync(stream,
+                converterConfiguration,
+                processedFieldCallback,
+                errorCallback);
+        }
+
+        public ConversionResult ConvertAsync(Stream stream,
+            ConverterConfiguration converterConfiguration,
+            Func<long, int, string, object, bool> processedFieldCallback,
+            Func<ParseError, bool> errorCallback)
         {
             var result = new ConversionResult
             {
@@ -418,13 +471,10 @@ namespace Lekha.Csv.Converter
             //   So, parsing individual field 'by hand' here.
             //
 
-            Dictionary<string, object> parsedRecord = null;
-
             while (csvReader.Read())
             {
                 error = null;
                 fieldIndex = 0;
-                parsedRecord = new Dictionary<string, object>();
 
                 #region Parse individual record
                 error = null;
@@ -502,7 +552,11 @@ namespace Lekha.Csv.Converter
 
                     if (parseFieldToValue)
                     {
-                        parsedRecord[sanitizedFieldDto.Configuration.Name] = objectValue;
+                        var retVal = processedFieldCallback(result.ProcessedRecordCount + 1, fieldIndex + 1, sanitizedFieldDto.Configuration.Name, objectValue);
+                        if (retVal == false)
+                        {
+                            break;
+                        }
                     }
                     else if (error != null)
                     {
@@ -523,14 +577,15 @@ namespace Lekha.Csv.Converter
                 if (error == null)
                 {
                     // Do something with the record.
-                    if (processedRecordCallback != null)
+                    if (processedFieldCallback != null)
                     {
-                        await processedRecordCallback(result.ProcessedRecordCount, parsedRecord);
+                        // -1 represents - end of record
+                        processedFieldCallback(result.ProcessedRecordCount, -1, null, null);
                     }
                 }
                 else
                 {
-                    var continueParsing = await errorCallback(error);
+                    var continueParsing = errorCallback(error);
                     if (continueParsing == false)
                     {
                         break;
