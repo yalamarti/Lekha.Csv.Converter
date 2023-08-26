@@ -51,7 +51,7 @@ namespace Lekha.Csv.Converter
         /// <param name="errorRecordCallback">Callback for handling error encounted when converting a CSV record.  
         /// To contiue with processing remaining records, return a true from this callback.</param>
         /// <returns></returns>
-        ConversionResult ConvertAsync(Stream stream,
+        ConversionResult Convert(Stream stream,
             ConverterConfiguration converterConfiguration,
             Func<long, int, string, object, bool> processedFieldCallback,
             Func<ParseError, bool> errorCallback);
@@ -68,7 +68,7 @@ namespace Lekha.Csv.Converter
         /// <param name="errorRecordCallback">Callback for handling error encounted when converting a CSV record.  
         /// To contiue with processing remaining records, return a true from this callback.</param>
         /// <returns></returns>
-        ConversionResult ConvertAsync(Stream stream,
+        ConversionResult Convert(Stream stream,
             Func<long, int, string, object, bool> processedFieldCallback,
             Func<ParseError, bool> errorCallback);
     }

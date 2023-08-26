@@ -322,7 +322,7 @@ namespace Lekha.Csv.Converter
             Func<ParseError, Task<bool>> errorCallback)
         {
             Dictionary<string, object> processedRecord = new Dictionary<string, object>();
-            var retVal = await Task.Run(() => ConvertAsync(stream,
+            var retVal = await Task.Run(() => Convert(stream,
             converterConfiguration,
             (long recordIndex, int fieldIndex, string fieldName, object fieldValue) =>
             {
@@ -346,18 +346,18 @@ namespace Lekha.Csv.Converter
             return retVal;
         }
 
-        public ConversionResult ConvertAsync(Stream stream,
+        public ConversionResult Convert(Stream stream,
             Func<long, int, string, object, bool> processedFieldCallback,
             Func<ParseError, bool> errorCallback)
         {
             var converterConfiguration = GetDefaultConverterConfiguration();
-            return ConvertAsync(stream,
+            return Convert(stream,
                 converterConfiguration,
                 processedFieldCallback,
                 errorCallback);
         }
 
-        public ConversionResult ConvertAsync(Stream stream,
+        public ConversionResult Convert(Stream stream,
             ConverterConfiguration converterConfiguration,
             Func<long, int, string, object, bool> processedFieldCallback,
             Func<ParseError, bool> errorCallback)

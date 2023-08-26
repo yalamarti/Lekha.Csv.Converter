@@ -186,7 +186,7 @@ namespace Lekha.Csv.Converter.Tests
             //
             Dictionary<string, object> processedRecord = new Dictionary<string, object>();
             ConversionResult result = null;
-            var exception = Xunit.Record.Exception(() => result = sut.ConvertAsync(stream, testCase.FileConfiguration,
+            var exception = Xunit.Record.Exception(() => result = sut.Convert(stream, testCase.FileConfiguration,
             (long recordIndex, int fieldIndex, string fieldName, object fieldValue) =>
             {
                 if (fieldIndex == -1)
