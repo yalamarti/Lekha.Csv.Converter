@@ -11,7 +11,7 @@
     <Copyright>MIT</Copyright>
     <Description>Convert a CSV stream to a Dictionary&lt;string, object&gt;</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
   </PropertyGroup>
 	
 	<PropertyGroup>

@@ -285,7 +285,7 @@ public static async Task ProcessUsingSpecifiedConfigurationWithHeaderInCsvData()
 
 # Release Notes
   
- * v1.1.1
+ * v1.1.2
     * Release notes documentation added to Readme document. 
    
  * v1.1.0
