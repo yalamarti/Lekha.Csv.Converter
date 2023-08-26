@@ -1,18 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31410.357
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{990A5C56-32C6-4BBC-A3A7-AB3CE88D3A65}"
 	ProjectSection(SolutionItems) = preProject
 		Mentions.txt = Mentions.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lekha.Csv.Converter", "Lekha.Csv.Converter\Lekha.Csv.Converter.csproj", "{AB41D3BA-52D4-4563-B830-CA3BB89DBB76}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lekha.Csv.Converter.Tests", "Lekha.Csv.Converter.Tests\Lekha.Csv.Converter.Tests.csproj", "{95B95485-DF59-4586-A492-F7F259091931}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lekha.Csv.Converter.Sample", "Lekha.Csv.Converter.Sample\Lekha.Csv.Converter.Sample.csproj", "{CC4B6FFE-683E-48D9-978B-6795172453FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lekha.Csv.Converter.Sample", "Lekha.Csv.Converter.Sample\Lekha.Csv.Converter.Sample.csproj", "{CC4B6FFE-683E-48D9-978B-6795172453FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

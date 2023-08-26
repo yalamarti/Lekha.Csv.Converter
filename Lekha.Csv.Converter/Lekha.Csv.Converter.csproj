@@ -11,13 +11,21 @@
     <Copyright>MIT</Copyright>
     <Description>Convert a CSV stream to a Dictionary&lt;string, object&gt;</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
   </PropertyGroup>
 	
 	<PropertyGroup>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+	
+	<ItemGroup>
+	  <None Include="..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
 
 	<ItemGroup>
     <PackageReference Include="CsvHelper" Version="30.0.1" />

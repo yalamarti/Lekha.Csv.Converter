@@ -282,3 +282,22 @@ public static async Task ProcessUsingSpecifiedConfigurationWithHeaderInCsvData()
   }
 ]
 ```
+
+# Release Notes
+  
+ * v1.1.1
+    * Release notes documentation added to Readme document. 
+   
+ * v1.1.0
+    * Non-async support, with individual field parsed/processed callback. 
+    * Updated CsvHelper package to latest version.
+   
+ * v1.0.1 (Breaking change)
+    * Constructor with no ILogger requirement added.
+    * Renamed FieldType to DataType.
+    * Support for custom fieldname prefix.
+    * Added Readme.md file.
+    * Added samples project.
+
+ * v1.0.0
+   * Initial Version
