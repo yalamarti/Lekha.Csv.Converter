@@ -92,10 +92,10 @@ namespace Lekha.Csv.Converter.Tests
 
             var testCases = JsonSerializer.Deserialize<List<TestCase>>(data);
 
-            var actualResult = new TestResult 
-            { 
-                RecordsWithDataTypeValues = new List<Dictionary<string, object>>(), 
-                RecordsWithStringValues = new List<Dictionary<string, string>>() 
+            var actualResult = new TestResult
+            {
+                RecordsWithDataTypeValues = new List<Dictionary<string, object>>(),
+                RecordsWithStringValues = new List<Dictionary<string, string>>()
             };
 
             var testCase = testCases.FirstOrDefault(i => i.TestCaseName == testCaseName);
@@ -153,5 +153,89 @@ namespace Lekha.Csv.Converter.Tests
                 actualResult.Should().BeEquivalentTo(testCase.ExpectedResult);
             }
         }
+
+        [Theory]
+        [InlineData(13.005, "Should parse successfully a multiple records  with header and field configuration and additional field values in the rows with no corresponding header and additional values in records, ignoring additional fields")]
+
+        public void ShouldConvertUsingCsvToDictionaryConverter(decimal testCaseName, string description)
+        {
+            //
+            // Setup
+            //
+            var testCaseDataFile = "DataFiles/TestCase.json";
+            var data = File.ReadAllText(testCaseDataFile);
+
+            var testCases = JsonSerializer.Deserialize<List<TestCase>>(data);
+
+            var actualResult = new TestResult
+            {
+                RecordsWithDataTypeValues = new List<Dictionary<string, object>>(),
+                RecordsWithStringValues = new List<Dictionary<string, string>>()
+            };
+
+            var testCase = testCases.FirstOrDefault(i => i.TestCaseName == testCaseName);
+            if (testCase == null)
+            {
+                throw new System.Exception($"Error locating test case in test case data file {testCaseDataFile} test.  Make sure there is a test case having {testCaseName} as the TestCaseName.  Test case description: {description}");
+            }
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(testCase.CsvData));
+            var sut = new CsvToDictionaryConverter(new NullLogger<CsvToDictionaryConverter>());
+
+            //
+            // Act
+            //
+            Dictionary<string, object> processedRecord = new Dictionary<string, object>();
+            ConversionResult result = null;
+            var exception = Xunit.Record.Exception(() => result = sut.ConvertAsync(stream, testCase.FileConfiguration,
+            (long recordIndex, int fieldIndex, string fieldName, object fieldValue) =>
+            {
+                if (fieldIndex == -1)
+                {
+                    if (testCase.ExpectedResult.RecordsWithStringValues.Count > 0)
+                    {
+                        var convertedDictionary = new Dictionary<string, string>();
+                        foreach (var kv in processedRecord)
+                        {
+                            convertedDictionary.Add(kv.Key, kv.Value.ToString());
+                        }
+                        actualResult.RecordsWithStringValues.Add(convertedDictionary);
+                    }
+                    else
+                    {
+                        actualResult.RecordsWithDataTypeValues.Add(processedRecord);
+                    }
+                    processedRecord = new Dictionary<string, object>();
+                }
+                else
+                {
+                    processedRecord[fieldName] = fieldValue;
+                }
+                return true;
+            }, (ParseError parseError) =>
+            {
+                return true;
+            }));
+            if (result != null)
+            {
+                actualResult.ProcessedRecordCount = result.ProcessedRecordCount;
+                actualResult.ErrorRecordCount = result.ErrorRecordCount;
+                actualResult.Success = result.Success;
+                actualResult.Message = result.Message;
+            }
+
+            //
+            // Verify
+            //
+            if (string.IsNullOrWhiteSpace(testCase.ExpectedResult.ExceptionType) == false)
+            {
+                exception.GetType().Name.Should().Be(testCase.ExpectedResult.ExceptionType);
+            }
+            else
+            {
+                exception.Should().Be(null);
+                actualResult.Should().BeEquivalentTo(testCase.ExpectedResult);
+            }
+        }
+
     }
 }
