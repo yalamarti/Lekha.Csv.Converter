@@ -21,6 +21,7 @@ namespace Lekha.Csv.Converter.Tests
             public List<string> TestDataDetails { get; set; }
             public ConverterConfiguration FileConfiguration { get; set; }
             public TestResult ExpectedResult { get; set; }
+            public string ErrorMessage { get; set; }
         }
         public class TestResult
         {
@@ -81,6 +82,11 @@ namespace Lekha.Csv.Converter.Tests
         [InlineData(15.4, "Should fail parsing when header but no field configuration is specified, and the same header field is specified more than once, case insensitive")]
         [InlineData(15.5, "Should fail parsing when no header specified, but field configuration is specified, and has a missing field name")]
         [InlineData(15.6, "Should fail parsing when header and field configuration are specified, and missing required fields in the header")]
+        [InlineData(16, "Should parse successfully when optional fields have empty values")]
+        [InlineData(17, "Should Failed to convert incorrectly formatted datetime value")]
+        [InlineData(18, "Should parse a single record successfully, detecting as delimiter when empt delimiter specified,  with no header and no field configuration specified")]
+        [InlineData(19, "Should parse a single record successfully with header and field configuration specified using a tab character as delimiter")]
+        [InlineData(20, "Should parse a single record successfully with header and field configuration specified using a space character as delimiter")]
 
         public async Task TestCsvToDictionaryConverter(decimal testCaseName, string description)
         {
@@ -109,6 +115,7 @@ namespace Lekha.Csv.Converter.Tests
             //
             // Act
             //
+            string errorMessageFound = null;
             ConversionResult result = null;
             var exception = await Xunit.Record.ExceptionAsync(async () => result = await sut.ConvertAsync(stream, testCase.FileConfiguration,
                  (long recordIndex, Dictionary<string, object> parsedRecord) =>
@@ -130,6 +137,7 @@ namespace Lekha.Csv.Converter.Tests
                  },
                  (ParseError error) =>
                  {
+                     errorMessageFound = error.Message;
                      return Task.FromResult(true);
                  }));
             if (result != null)
@@ -149,9 +157,12 @@ namespace Lekha.Csv.Converter.Tests
             }
             else
             {
+                var json = JsonSerializer.Serialize(actualResult);
                 exception.Should().Be(null);
                 actualResult.Should().BeEquivalentTo(testCase.ExpectedResult);
             }
+
+            errorMessageFound.Should().Be(testCase.ErrorMessage);
         }
 
         [Theory]

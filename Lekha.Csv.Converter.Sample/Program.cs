@@ -1,6 +1,7 @@
 ﻿using Lekha.Csv.Converter.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -54,14 +55,15 @@ namespace Lekha.Csv.Converter.Sample
             ICsvToDictionaryConverter converter = new CsvToDictionaryConverter();
 
             ConversionResult result = await converter.ConvertAsync(fileStream, 
-                new ConverterConfiguration
+                new CsvConverterConfiguration(CultureInfo.InvariantCulture)
                 {
                     FieldNamePrefix = "",
                     HasHeaderRecord = false,
-                    CommentCharacter = '#',
+                    Comment = '#',
+                    AllowComments = true,
+                    Delimiter = "|",
                     RecordConfiguration = new RecordConfiguration
                     {
-                        Delimiter = "|",
                         Fields = new List<FieldConfiguration>
                         {
                             new FieldConfiguration
@@ -106,14 +108,15 @@ namespace Lekha.Csv.Converter.Sample
             ICsvToDictionaryConverter converter = new CsvToDictionaryConverter();
 
             ConversionResult result = await converter.ConvertAsync(fileStream, 
-                new ConverterConfiguration
+                new CsvConverterConfiguration
                 {
                     FieldNamePrefix = "",
                     HasHeaderRecord = false,
-                    CommentCharacter = '#',
+                    Comment = '#',
+                    AllowComments = true,
+                    Delimiter = "|",
                     RecordConfiguration = new RecordConfiguration
                     {
-                        Delimiter = "|",
                         Fields = new List<FieldConfiguration>
                             {
                                 new FieldConfiguration

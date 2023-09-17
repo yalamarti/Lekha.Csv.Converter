@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Lekha.Csv.Converter.Models
 {
@@ -10,7 +12,13 @@ namespace Lekha.Csv.Converter.Models
         /// <summary>
         /// Resolved configuration used during conversion.
         /// </summary>
+        [Obsolete("Use CsvConfiguration property instead")]
         public ConverterConfiguration Configuration { get; set; }
+        /// <summary>
+        /// Resolved configuration used during conversion.
+        /// </summary>
+        public CsvConverterConfiguration CsvConfiguration { get; set; }
+
         /// <summary>
         /// Conversion successfully completed or failed.
         /// true - success; false - failure
@@ -30,7 +38,7 @@ namespace Lekha.Csv.Converter.Models
         /// <summary>
         /// Total CSV records with errors
         /// </summary>
-        public long ErrorRecordCount { get; set; }
+        public long ErrorRecordCount => Errors == null ? 0 : Errors.LongCount();
 
         /// <summary>
         /// Headers resolved from the CSV data
