@@ -132,14 +132,15 @@ public static async Task ProcessUsingSpecifiedConfigurationWithNoHeaderInCsvData
     ICsvToDictionaryConverter converter = new CsvToDictionaryConverter();
 
     ConversionResult result = await converter.ConvertAsync(fileStream, 
-        new ConverterConfiguration
+        new CsvConverterConfiguration
         {
             FieldNamePrefix = "",
             HasHeaderRecord = false,
-            CommentCharacter = '#',
+            Comment = '#',
+            AllowComments = true,
+            Delimiter = "|",
             RecordConfiguration = new RecordConfiguration
             {
-                Delimiter = "|",
                 Fields = new List<FieldConfiguration>
                 {
                     new FieldConfiguration
@@ -218,14 +219,15 @@ public static async Task ProcessUsingSpecifiedConfigurationWithHeaderInCsvData()
     ICsvToDictionaryConverter converter = new CsvToDictionaryConverter();
 
     ConversionResult result = await converter.ConvertAsync(fileStream, 
-        new ConverterConfiguration
+        new CsvConverterConfiguration
         {
             FieldNamePrefix = "",
             HasHeaderRecord = false,
-            CommentCharacter = '#',
+            Comment = '#',
+            AllowComments = true,
+            Delimiter = "|",
             RecordConfiguration = new RecordConfiguration
             {
-                Delimiter = "|",
                 Fields = new List<FieldConfiguration>
                     {
                         new FieldConfiguration
@@ -285,6 +287,9 @@ public static async Task ProcessUsingSpecifiedConfigurationWithHeaderInCsvData()
 
 # Release Notes
   
+ * v1.1.3
+    * Added full support for CsvConfiguration model from CsvHelper, by introducing CsvConverterConfiguration 
+   
  * v1.1.2
     * Release notes documentation added to Readme document. 
    

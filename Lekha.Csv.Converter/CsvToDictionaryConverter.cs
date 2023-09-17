@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -247,63 +246,124 @@ namespace Lekha.Csv.Converter
             return retVal;
         }
 
-        private void SetupObservations(ConverterConfiguration converterConfiguration, ConversionResult parseResult)
+        private void SetupObservations(CsvConverterConfiguration converterConfiguration, ConversionResult parseResult)
         {
-            if (converterConfiguration.CommentCharacter == null)
+            if (converterConfiguration.AllowComments == false)
             {
                 parseResult.Observations.Add("No comment character specified.  Assuming no commented lines.");
             }
             else
             {
-                parseResult.Observations.Add($"Comment character specified.  Lines starting with '{converterConfiguration.CommentCharacter.Value}' character will be ignored.");
+                parseResult.Observations.Add($"Comment character specified.  Lines starting with '{converterConfiguration.Comment}' character will be ignored.");
             }
-            if (string.IsNullOrWhiteSpace(converterConfiguration.RecordConfiguration?.Delimiter))
+            if (string.IsNullOrEmpty(converterConfiguration.RecordConfiguration?.Delimiter))
             {
                 parseResult.Observations.Add("No field delimiter specified.  Delimiter will be auto-detected.");
             }
         }
 
-        private CsvConfiguration SetupCsvReaderConfiguration(ConverterConfiguration converterConfiguration)
+        //private CsvConfiguration SetupCsvReaderConfiguration(ConverterConfiguration converterConfiguration)
+        //{
+        //    var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
+        //    {
+        //        HasHeaderRecord = (converterConfiguration.HasHeaderRecord == true)
+        //    };
+        //    if (converterConfiguration.CommentCharacter != null)
+        //    {
+        //        csvConfiguration.Comment = converterConfiguration.CommentCharacter.Value;
+        //        csvConfiguration.AllowComments = true;
+        //    }
+
+        //    if (string.IsNullOrEmpty(converterConfiguration.RecordConfiguration?.Delimiter))
+        //    {
+        //        csvConfiguration.DetectDelimiter = true;
+        //    }
+        //    else
+        //    {
+        //        csvConfiguration.Delimiter = converterConfiguration.RecordConfiguration?.Delimiter;
+        //    }
+
+        //    csvConfiguration.PrepareHeaderForMatch += new PrepareHeaderForMatch((PrepareHeaderForMatchArgs args) =>
+        //    {
+        //        return args.Header?.ToSanitizedFieldName();
+        //    });
+
+        //    return csvConfiguration;
+        //}
+        private void SetupCsvReaderConfiguration(CsvConverterConfiguration converterConfiguration)
         {
-            var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                HasHeaderRecord = (converterConfiguration.HasHeaderRecord == true)
-            };
-            if (converterConfiguration.CommentCharacter != null)
-            {
-                csvConfiguration.Comment = converterConfiguration.CommentCharacter.Value;
-                csvConfiguration.AllowComments = true;
-            }
-
-            if (string.IsNullOrWhiteSpace(converterConfiguration.RecordConfiguration?.Delimiter))
-            {
-                csvConfiguration.DetectDelimiter = true;
-            }
-            else
-            {
-                csvConfiguration.Delimiter = converterConfiguration.RecordConfiguration?.Delimiter;
-            }
-
-            csvConfiguration.PrepareHeaderForMatch += new PrepareHeaderForMatch((PrepareHeaderForMatchArgs args) =>
+            converterConfiguration.PrepareHeaderForMatch += new PrepareHeaderForMatch((PrepareHeaderForMatchArgs args) =>
             {
                 return args.Header?.ToSanitizedFieldName();
             });
-
-            return csvConfiguration;
         }
 
-        private ConverterConfiguration GetDefaultConverterConfiguration()
+        private CsvConverterConfiguration GetDefaultConverterConfiguration()
         {
-            return new ConverterConfiguration
+            var retVal = new CsvConverterConfiguration
             {
+                HasHeaderRecord = false,
+                AllowComments = false,
                 RecordConfiguration = new RecordConfiguration
                 {
                     Delimiter = DefaultDelimiter,
                     Fields = new List<FieldConfiguration>(),
-                }
+                },
             };
+            retVal.PrepareHeaderForMatch += new PrepareHeaderForMatch((PrepareHeaderForMatchArgs args) =>
+            {
+                return args.Header?.ToSanitizedFieldName();
+            });
+            return retVal;
         }
 
+        private ConverterConfiguration GetConfiguration(CsvConverterConfiguration converterConfiguration)
+        {
+            return new ConverterConfiguration
+            {
+                CommentCharacter = converterConfiguration.Comment,
+                HasHeaderRecord = converterConfiguration.HasHeaderRecord,
+                FieldNamePrefix = converterConfiguration.FieldNamePrefix,
+                RecordConfiguration = converterConfiguration.RecordConfiguration
+            };
+        }
+        private CsvConverterConfiguration GetCsvConfiguration(ConverterConfiguration converterConfiguration)
+        {
+            if (converterConfiguration == null)
+            {
+                return GetDefaultConverterConfiguration();
+            }
+
+            var retVal = new CsvConverterConfiguration
+            {
+                HasHeaderRecord = converterConfiguration.HasHeaderRecord == true,
+                FieldNamePrefix = converterConfiguration.FieldNamePrefix,
+                RecordConfiguration = converterConfiguration.RecordConfiguration
+            };
+            if (string.IsNullOrEmpty(converterConfiguration.RecordConfiguration?.Delimiter))
+            {
+                retVal.DetectDelimiter = true;
+            }
+            else
+            {
+                retVal.Delimiter = converterConfiguration.RecordConfiguration?.Delimiter;
+                if (converterConfiguration.RecordConfiguration?.Delimiter.Trim() == "")
+                {
+                    // Reference: https://github.com/JoshClose/CsvHelper/issues/1782#issuecomment-975990632
+                    retVal.WhiteSpaceChars = new char[] {  };
+                }
+            }
+            if (converterConfiguration.CommentCharacter.HasValue)
+            {
+                retVal.Comment = converterConfiguration.CommentCharacter.Value;
+                retVal.AllowComments = true;
+            }
+            retVal.PrepareHeaderForMatch += new PrepareHeaderForMatch((PrepareHeaderForMatchArgs args) =>
+            {
+                return args.Header?.ToSanitizedFieldName();
+            });
+            return retVal;
+        }
 
         public async Task<ConversionResult> ConvertAsync(Stream stream,
             Func<long, Dictionary<string, object>, Task> processedRecordCallback,
@@ -318,6 +378,19 @@ namespace Lekha.Csv.Converter
 
         public async Task<ConversionResult> ConvertAsync(Stream stream,
             ConverterConfiguration converterConfiguration,
+            Func<long, Dictionary<string, object>, Task> processedRecordCallback,
+            Func<ParseError, Task<bool>> errorCallback)
+        {
+            var configuration = GetCsvConfiguration(converterConfiguration);
+
+            return await ConvertAsync(stream,
+                configuration,
+                processedRecordCallback,
+                errorCallback);
+        }
+
+        public async Task<ConversionResult> ConvertAsync(Stream stream,
+            CsvConverterConfiguration converterConfiguration,
             Func<long, Dictionary<string, object>, Task> processedRecordCallback,
             Func<ParseError, Task<bool>> errorCallback)
         {
@@ -357,8 +430,20 @@ namespace Lekha.Csv.Converter
                 errorCallback);
         }
 
+
         public ConversionResult Convert(Stream stream,
             ConverterConfiguration converterConfiguration,
+            Func<long, int, string, object, bool> processedFieldCallback,
+            Func<ParseError, bool> errorCallback)
+        {
+            var configuration = GetCsvConfiguration(converterConfiguration);
+            return Convert(stream,
+                configuration,
+                processedFieldCallback,
+                errorCallback);
+        }
+        public ConversionResult Convert(Stream stream,
+            CsvConverterConfiguration converterConfiguration,
             Func<long, int, string, object, bool> processedFieldCallback,
             Func<ParseError, bool> errorCallback)
         {
@@ -370,13 +455,12 @@ namespace Lekha.Csv.Converter
             #region Setup and validate input
             if (converterConfiguration == null)
             {
-                converterConfiguration = new ConverterConfiguration
-                {
-                };
-                // No header
-                result.Observations.Add("No header specified.  Defaulting to 'No Header'.");
+                converterConfiguration = GetDefaultConverterConfiguration();
+                result.Observations.Add("No configuration specified.  Using default configuration.");
             }
-            result.Configuration = converterConfiguration;
+            result.Configuration = GetConfiguration(converterConfiguration);
+
+            result.CsvConfiguration = converterConfiguration;
 
             if (converterConfiguration.RecordConfiguration == null)
             {
@@ -385,6 +469,8 @@ namespace Lekha.Csv.Converter
                 };
                 result.Observations.Add($"No Field specification found.  Will default all fields to be of {DataType.String} data type.");
             }
+
+            SetupCsvReaderConfiguration(converterConfiguration);
 
             var userSpecifiedFieldConfigurations = converterConfiguration.RecordConfiguration?.Fields?.Count > 0;
 
@@ -397,7 +483,7 @@ namespace Lekha.Csv.Converter
                 if (hasHeaderRecord)
                 {
                     fieldInfoSource = FieldConfigurationSource.FromHeader;
-                    result.Observations.Add($"No fields specified as part of {nameof(ConverterConfiguration)}.  Fields wiill be auto-detected.");
+                    result.Observations.Add($"No fields specified as part of {nameof(ConverterConfiguration)}.  Fields will be auto-detected.");
                 }
                 else
                 {
@@ -415,7 +501,7 @@ namespace Lekha.Csv.Converter
 
             var sanitizedFieldConfigurations = SanitizedFieldInfo(converterConfiguration.RecordConfiguration.Fields, fieldInfoSource);
 
-            CsvConfiguration csvConfiguration = SetupCsvReaderConfiguration(converterConfiguration);
+            //CsvConfiguration csvConfiguration = SetupCsvReaderConfiguration(converterConfiguration);
             var parseResult = ValidateHeaderAndFieldConfiguration(stream, sanitizedFieldConfigurations, hasHeaderRecord, userSpecifiedFieldConfigurations);
             if (parseResult != null)
             {
@@ -452,7 +538,7 @@ namespace Lekha.Csv.Converter
             #region Parse
 
             using var reader = new StreamReader(stream);
-            using var csvReader = new CsvReader(reader, csvConfiguration);
+            using var csvReader = new CsvReader(reader, converterConfiguration);
 
             ParseError error = null;
             var fieldIndex = 0;
@@ -462,6 +548,7 @@ namespace Lekha.Csv.Converter
             {
                 csvReader.Read();
                 csvReader.ReadHeader();
+                result.FoundHeaders = csvReader.HeaderRecord;
             }
 
             // 
@@ -552,7 +639,7 @@ namespace Lekha.Csv.Converter
 
                     if (parseFieldToValue)
                     {
-                        var retVal = processedFieldCallback(result.ProcessedRecordCount + 1, fieldIndex + 1, sanitizedFieldDto.Configuration.Name, objectValue);
+                        var retVal = processedFieldCallback(csvReader.Context.Parser.Row, fieldIndex + 1, sanitizedFieldDto.Configuration.Name, objectValue);
                         if (retVal == false)
                         {
                             break;
@@ -561,7 +648,6 @@ namespace Lekha.Csv.Converter
                     else if (error != null)
                     {
                         result.Errors.Add(error);
-                        result.ErrorRecordCount++;
                         break;
                     }
 
@@ -580,7 +666,7 @@ namespace Lekha.Csv.Converter
                     if (processedFieldCallback != null)
                     {
                         // -1 represents - end of record
-                        processedFieldCallback(result.ProcessedRecordCount, -1, null, null);
+                        processedFieldCallback(csvReader.Context.Parser.Row, -1, null, null);
                     }
                 }
                 else
@@ -598,7 +684,8 @@ namespace Lekha.Csv.Converter
             #endregion Parse
 
             result.Success = result.Errors.Count == 0;
-            result.Message = string.IsNullOrWhiteSpace(result.Message) ? (result.ProcessedRecordCount == 0 ? NoRecordsProcessed : null) : result.Message; return result;
+            result.Message = string.IsNullOrWhiteSpace(result.Message) ? (result.ProcessedRecordCount == 0 ? NoRecordsProcessed : null) : result.Message;
+            return result;
         }
     }
 }

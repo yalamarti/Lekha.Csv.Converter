@@ -26,6 +26,22 @@ namespace Lekha.Csv.Converter
             Func<ParseError, Task<bool>> errorCallback);
 
         /// <summary>
+        /// Converts CSV from the specified stream to a Dictionary<string, object>.
+        /// Uses default ConverterConfiguration. 
+        /// </summary>
+        /// <param name="stream">CSV source stream</param>
+        /// <param name="processedFieldCallback">Callback for handling a converted CSV record individual field.
+        ///    Callback parameters: long recordIndex, int fieldIndex, string fieldName, object fieldValue
+        ///    Callback return value: true to continue to the next record; false to stop processing.
+        /// </param>
+        /// <param name="errorRecordCallback">Callback for handling error encounted when converting a CSV record.  
+        /// To contiue with processing remaining records, return a true from this callback.</param>
+        /// <returns></returns>
+        ConversionResult Convert(Stream stream,
+            Func<long, int, string, object, bool> processedFieldCallback,
+            Func<ParseError, bool> errorCallback);
+
+        /// <summary>
         /// Converts CSV from the specified stream to a Dictionary<string, object>
         /// </summary>
         /// <param name="stream">CSV source stream</param>
@@ -34,6 +50,7 @@ namespace Lekha.Csv.Converter
         /// <param name="errorRecordCallback">Callback for handling error encounted when converting a CSV record.  
         /// To contiue with processing remaining records, return a true from this callback.</param>
         /// <returns></returns>
+        [Obsolete("Use ConvertAsync that uses CsvConverterConfiguration parameter instead.")]
         Task<ConversionResult> ConvertAsync(Stream stream, 
             ConverterConfiguration configuration,
             Func<long, Dictionary<string, object>, Task> processedRecordCallback, 
@@ -51,16 +68,31 @@ namespace Lekha.Csv.Converter
         /// <param name="errorRecordCallback">Callback for handling error encounted when converting a CSV record.  
         /// To contiue with processing remaining records, return a true from this callback.</param>
         /// <returns></returns>
+        [Obsolete("Use ConvertAsync that uses CsvConverterConfiguration parameter instead.")]
         ConversionResult Convert(Stream stream,
             ConverterConfiguration converterConfiguration,
             Func<long, int, string, object, bool> processedFieldCallback,
             Func<ParseError, bool> errorCallback);
 
         /// <summary>
-        /// Converts CSV from the specified stream to a Dictionary<string, object>.
-        /// Uses default ConverterConfiguration. 
+        /// Converts CSV from the specified stream to a Dictionary<string, object>
         /// </summary>
         /// <param name="stream">CSV source stream</param>
+        /// <param name="configuration">Configuration to apply when converting from CSV.</param>
+        /// <param name="processedRecordCallback">Callback for handling a converted CSV record</param>
+        /// <param name="errorRecordCallback">Callback for handling error encounted when converting a CSV record.  
+        /// To contiue with processing remaining records, return a true from this callback.</param>
+        /// <returns></returns>
+        Task<ConversionResult> ConvertAsync(Stream stream,
+            CsvConverterConfiguration configuration,
+            Func<long, Dictionary<string, object>, Task> processedRecordCallback,
+            Func<ParseError, Task<bool>> errorRecordCallback);
+
+        /// <summary>
+        /// Converts CSV from the specified stream to a Dictionary<string, object>.
+        /// </summary>
+        /// <param name="stream">CSV source stream</param>
+        /// <param name="configuration">Configuration to apply when converting from CSV.</param>
         /// <param name="processedFieldCallback">Callback for handling a converted CSV record individual field.
         ///    Callback parameters: long recordIndex, int fieldIndex, string fieldName, object fieldValue
         ///    Callback return value: true to continue to the next record; false to stop processing.
@@ -69,6 +101,7 @@ namespace Lekha.Csv.Converter
         /// To contiue with processing remaining records, return a true from this callback.</param>
         /// <returns></returns>
         ConversionResult Convert(Stream stream,
+            CsvConverterConfiguration converterConfiguration,
             Func<long, int, string, object, bool> processedFieldCallback,
             Func<ParseError, bool> errorCallback);
     }

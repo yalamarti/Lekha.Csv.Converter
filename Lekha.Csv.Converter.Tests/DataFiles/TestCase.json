@@ -750,7 +750,8 @@
       "ProcessedRecordCount": 1,
       "ErrorRecordCount": 1,
       "Success": false
-    }
+    },
+    "ErrorMessage": "Failed to convert 'value of field:Field2' to unsigned-number"
   },
 
   {
@@ -1655,7 +1656,8 @@
       "ProcessedRecordCount": 3,
       "ErrorRecordCount": 2,
       "Success": false
-    }
+    },
+    "ErrorMessage": "Failed to convert 'value of field:Field3' to decimal"
   },
 
   {
@@ -1876,6 +1878,341 @@
       "ErrorRecordCount": 0,
       "Success": false,
       "Message": "Field(s) 'Field3,Field4' specified in Record Configuration but are missing in the header data"
+    }
+  },
+
+  {
+    "TestCaseName": 16,
+    "Description": "Should parse successfully when no header specified, but a field configuration is specified, and some records have empty values for optional fields",
+    "CsvData": "1,I am a string,1844674,18446744073709551615.18446744073709551615,2023/12/31,,22:31\r\n#I am a comment: MM/dd/yyyy. HH:mm.\r\n2,,184467,18446744073709551615.18446744073709551615,2023/12/31,2023/12/31 22:30,22:32",
+    "FileConfiguration": {
+      "HasHeaderRecord": false,
+      "CommentCharacter": "#",
+      "FieldNamePrefix": "Field",
+      "RecordConfiguration": {
+        "Delimiter": null,
+        "Fields": [
+          {
+            "Name": "MyFieldNumber",
+            "Title": null,
+            "DataType": "number",
+            "DateTimeFormat": null,
+            "AllowEmptyField": false,
+            "Required": false,
+            "AllowedMaximumLength": 2048,
+            "ExposeableToPublic": false
+          },
+          {
+            "Name": "MyFieldString",
+            "Title": null,
+            "DataType": "string",
+            "DateTimeFormat": null,
+            "AllowEmptyField": false,
+            "Required": false,
+            "AllowedMaximumLength": 2048,
+            "ExposeableToPublic": false
+          },
+          {
+            "Name": "MyFieldSignedNumber",
+            "Title": null,
+            "DataType": "number",
+            "DateTimeFormat": null,
+            "AllowEmptyField": false,
+            "Required": false,
+            "AllowedMaximumLength": 2048,
+            "ExposeableToPublic": false
+          },
+          {
+            "Name": "MyFieldDecimal",
+            "Title": null,
+            "DataType": "decimal",
+            "DateTimeFormat": null,
+            "AllowEmptyField": false,
+            "Required": false,
+            "AllowedMaximumLength": 2048,
+            "ExposeableToPublic": false
+          },
+          {
+            "Name": "MyFieldDate",
+            "Title": null,
+            "DataType": "date",
+            "DateTimeFormat": null,
+            "AllowEmptyField": false,
+            "Required": false,
+            "AllowedMaximumLength": 2048,
+            "ExposeableToPublic": false
+          },
+          {
+            "Name": "MyFieldDateTime",
+            "Title": null,
+            "DataType": "datetime",
+            "DateTimeFormat": null,
+            "AllowEmptyField": false,
+            "Required": false,
+            "AllowedMaximumLength": 2048,
+            "ExposeableToPublic": false
+          }
+        ]
+      }
+    },
+    "ExpectedResult": {
+      "RecordsWithDataTypeValues": [
+        {
+          "MyFieldNumber": 1,
+          "MyFieldString": "I am a string",
+          "MyFieldSignedNumber": 1844674,
+          "MyFieldDecimal": 18446744073709551615.184467441,
+          "MyFieldDate": "2023-12-31T00:00:00+00:00"
+        },
+        {
+          "MyFieldNumber": 2,
+          "MyFieldString": "",
+          "MyFieldSignedNumber": 184467,
+          "MyFieldDecimal": 18446744073709551615.184467441,
+          "MyFieldDate": "2023-12-31T00:00:00+00:00",
+          "MyFieldDateTime": "2023-12-31T22:30:00+00:00"
+        }
+      ],
+      "RecordsWithStringValues": [],
+      "ProcessedRecordCount": 2,
+      "ErrorRecordCount": 0,
+      "Success": true
+    }
+  },
+
+  {
+    "TestCaseName": 17,
+    "Description": "Should parse successfully when no header specified, but a field configuration is specified, and some records have empty values for optional fields",
+    "CsvData": "1,I am a string,1844674,18446744073709551615.18446744073709551615,2023/12/31,,22:31\r\n#I am a comment: MM/dd/yyyy. HH:mm.\r\n2,,184467,18446744073709551615.18446744073709551615,x2023/12/31,2023/12/31 22:30,22:32",
+    "FileConfiguration": {
+      "HasHeaderRecord": false,
+      "CommentCharacter": "#",
+      "FieldNamePrefix": "Field",
+      "RecordConfiguration": {
+        "Delimiter": null,
+        "Fields": [
+          {
+            "Name": "MyFieldNumber",
+            "Title": null,
+            "DataType": "number",
+            "DateTimeFormat": null,
+            "AllowEmptyField": false,
+            "Required": false,
+            "AllowedMaximumLength": 2048,
+            "ExposeableToPublic": false
+          },
+          {
+            "Name": "MyFieldString",
+            "Title": null,
+            "DataType": "string",
+            "DateTimeFormat": null,
+            "AllowEmptyField": false,
+            "Required": false,
+            "AllowedMaximumLength": 2048,
+            "ExposeableToPublic": false
+          },
+          {
+            "Name": "MyFieldSignedNumber",
+            "Title": null,
+            "DataType": "number",
+            "DateTimeFormat": null,
+            "AllowEmptyField": false,
+            "Required": false,
+            "AllowedMaximumLength": 2048,
+            "ExposeableToPublic": false
+          },
+          {
+            "Name": "MyFieldDecimal",
+            "Title": null,
+            "DataType": "decimal",
+            "DateTimeFormat": null,
+            "AllowEmptyField": false,
+            "Required": false,
+            "AllowedMaximumLength": 2048,
+            "ExposeableToPublic": false
+          },
+          {
+            "Name": "MyFieldDate",
+            "Title": null,
+            "DataType": "date",
+            "DateTimeFormat": null,
+            "AllowEmptyField": false,
+            "Required": false,
+            "AllowedMaximumLength": 2048,
+            "ExposeableToPublic": false
+          },
+          {
+            "Name": "MyFieldDateTime",
+            "Title": null,
+            "DataType": "datetime",
+            "DateTimeFormat": null,
+            "AllowEmptyField": false,
+            "Required": false,
+            "AllowedMaximumLength": 2048,
+            "ExposeableToPublic": false
+          }
+        ]
+      }
+    },
+    "ExpectedResult": {
+      "RecordsWithDataTypeValues": [
+        {
+          "MyFieldNumber": 1,
+          "MyFieldString": "I am a string",
+          "MyFieldSignedNumber": 1844674,
+          "MyFieldDecimal": 18446744073709551615.184467441,
+          "MyFieldDate": "2023-12-31T00:00:00+00:00"
+        }
+      ],
+      "RecordsWithStringValues": [],
+      "ProcessedRecordCount": 2,
+      "ErrorRecordCount": 1,
+      "Success": false
+    },
+    "ErrorMessage": "Failed to convert 'value of field:MyFieldDate' to date using 'yyyy/MM/dd' format"
+  },
+  {
+    "TestCaseName": 18,
+    "Description": "Should parse a single record successfully, detecting a delimiter when empty delimiter specified,  with no header and no field configuration specified",
+    "CsvData": "-9393,9393,-0.999999999999999999999999999,0.999999999999999999999999999,2021/10/10,This is a string field,9999/12/31 23:59:59",
+    "FileConfiguration": {
+      "RecordConfiguration": {
+        "Delimiter": ""
+      }
+    },
+    "ExpectedResult": {
+      "Success": true,
+      "RecordsWithDataTypeValues": [
+        {
+          "Field1": "-9393",
+          "Field2": "9393",
+          "Field3": "-0.999999999999999999999999999",
+          "Field4": "0.999999999999999999999999999",
+          "Field5": "2021/10/10",
+          "Field6": "This is a string field",
+          "Field7": "9999/12/31 23:59:59"
+        }
+      ],
+      "RecordsWithStringValues": [],
+      "ProcessedRecordCount": 1
+    }
+  },
+  {
+    "TestCaseName": 19,
+    "Description": "Should parse a single record successfully with header and field configuration specified using a tab character as delimiter",
+    "CsvData": "Field1\tField2\tField3\tField4\tField5\tField6\tField7\r\n-9393\t9393\t-0.999999999999999999999999999\t0.999999999999999999999999999\t2021/10/10\tThisisastringfield\t9999/12/3123:59:59",
+    "FileConfiguration": {
+      "HasHeaderRecord": true,
+      "CommentCharacter": null,
+      "RecordConfiguration": {
+        "Delimiter": "\t",
+        "Fields": [
+          {
+            "Name": "Field1",
+            "DataType": "number"
+          },
+          {
+            "Name": "Field2",
+            "DataType": "unsigned-number"
+          },
+          {
+            "Name": "Field3",
+            "DataType": "decimal"
+          },
+          {
+            "Name": "Field4",
+            "DataType": "decimal"
+          },
+          {
+            "Name": "Field5",
+            "DataType": "date"
+          },
+          {
+            "Name": "Field6",
+            "DataType": "string"
+          },
+          {
+            "Name": "Field7",
+            "DataType": "date",
+            "DateTimeFormat": "yyyy/MM/ddHH:mm:ss"
+          }
+        ]
+      }
+    },
+    "ExpectedResult": {
+      "Success": true,
+      "RecordsWithDataTypeValues": [
+        {
+          "Field1": -9393,
+          "Field2": 9393,
+          "Field3": -0.999999999999999999999999999,
+          "Field4": 0.999999999999999999999999999,
+          "Field5": "2021-10-10T00:00:00+00:00",
+          "Field6": "Thisisastringfield",
+          "Field7": "9999-12-31T23:59:59+00:00"
+        }
+      ],
+      "RecordsWithStringValues": [],
+      "ProcessedRecordCount": 1
+    }
+  },
+  {
+    "TestCaseName": 20,
+    "Description": "Should parse a single record successfully with header and field configuration specified using a space character as delimiter",
+    "CsvData": "Field1 Field2 Field3 Field4 Field5 Field6 Field7\r\n-9393 9393 -0.999999999999999999999999999 0.999999999999999999999999999 2021/10/10 Thisisastringfield 9999/12/3123:59:59",
+    "FileConfiguration": {
+      "HasHeaderRecord": true,
+      "CommentCharacter": null,
+      "RecordConfiguration": {
+        "Delimiter": " ",
+        "Fields": [
+          {
+            "Name": "Field1",
+            "DataType": "number"
+          },
+          {
+            "Name": "Field2",
+            "DataType": "unsigned-number"
+          },
+          {
+            "Name": "Field3",
+            "DataType": "decimal"
+          },
+          {
+            "Name": "Field4",
+            "DataType": "decimal"
+          },
+          {
+            "Name": "Field5",
+            "DataType": "date"
+          },
+          {
+            "Name": "Field6",
+            "DataType": "string"
+          },
+          {
+            "Name": "Field7",
+            "DataType": "date",
+            "DateTimeFormat": "yyyy/MM/ddHH:mm:ss"
+          }
+        ]
+      }
+    },
+    "ExpectedResult": {
+      "Success": true,
+      "RecordsWithDataTypeValues": [
+        {
+          "Field1": -9393,
+          "Field2": 9393,
+          "Field3": -0.999999999999999999999999999,
+          "Field4": 0.999999999999999999999999999,
+          "Field5": "2021-10-10T00:00:00+00:00",
+          "Field6": "Thisisastringfield",
+          "Field7": "9999-12-31T23:59:59+00:00"
+        }
+      ],
+      "RecordsWithStringValues": [],
+      "ProcessedRecordCount": 1
     }
   }
 
